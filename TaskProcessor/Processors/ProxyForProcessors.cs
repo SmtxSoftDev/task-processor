@@ -27,7 +27,7 @@
 
         private void WriteToFile(string data)
         {
-            using (StreamWriter sw = new StreamWriter(@$"C:\{this.GetType().Name}.txt", true))
+            using (StreamWriter sw = new StreamWriter(@$"C:\{GetType().Name}.txt", true))
             {
                 sw.WriteLine(data);
             }
