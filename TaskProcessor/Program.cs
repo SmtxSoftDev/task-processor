@@ -12,6 +12,7 @@ public class Program
             classess.ForEach(name =>
             {
                 IProcessor processor = GetInstance<IProcessor>(name);
+                processor = new ProxyForProcessors(processor);
                 processor.Start();
             });
         }

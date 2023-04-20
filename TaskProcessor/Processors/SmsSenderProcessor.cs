@@ -2,12 +2,9 @@
 {
     public class SmsSenderProcessor : IProcessor
     {
-        public void Start()
+        public string Start()
         {
-            using (StreamWriter sw = new StreamWriter($@"D:\{this.GetType().Name}.txt", true))
-            {
-                sw.WriteLine($"Start {this.GetType().Name} at {DateTime.Now} and send message: {Guid.NewGuid()}");
-            }
+            return $"send message: {Guid.NewGuid()}";
         }
     }
 }

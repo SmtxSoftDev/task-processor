@@ -2,6 +2,6 @@
 {
     public interface IProcessor
     {
-        public void Start();
+        public string Start();
     }
 }
