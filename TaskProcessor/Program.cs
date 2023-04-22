@@ -1,32 +1,34 @@
-﻿namespace TaskProcessor;
-using System.Configuration;
-using TaskProcessor.Processors;
-
-public class Program
+﻿namespace TaskProcessor
 {
-    public static void Main(string [] args)
+    using System.Configuration;
+    using TaskProcessor.Processors;
+
+    public class Program
     {
-        while (true)
+        public static void Main(string[] args)
         {
-            var classess = ConfigurationManager.AppSettings.AllKeys.ToList();
-            classess.ForEach(name =>
+            while (true)
             {
-                IProcessor processor = GetInstance<IProcessor>(name);
-                processor = new ProxyForProcessors(processor);
-                processor.Start();
-            });
+                var classess = ConfigurationManager.AppSettings.AllKeys.ToList();
+                classess.ForEach(name =>
+                {
+                    IProcessor processor = GetInstance<IProcessor>(name);
+                    processor = new ProxyForProcessors(processor);
+                    processor.Start();
+                });
+            }
         }
+
+        #region GetInstance
+
+        public static T GetInstance<T>(string? className)
+        {
+            string objectToInstantiate = $"TaskProcessor.Processors.{className}, TaskProcessor";
+            var objectType = Type.GetType(objectToInstantiate);
+            var instantiatedObject = Activator.CreateInstance(objectType);
+            return (T)instantiatedObject;
+        }
+
+        #endregion
     }
-
-    #region GetInstance
-
-    public static T GetInstance<T>(string? className)
-    {
-        string objectToInstantiate = $"TaskProcessor.Processors.{className}, TaskProcessor";
-        var objectType = Type.GetType(objectToInstantiate);
-        var instantiatedObject = Activator.CreateInstance(objectType);
-        return (T)instantiatedObject;
-    }
-
-    #endregion
 }
