@@ -1,6 +1,7 @@
 ﻿namespace TaskProcessor
 {
     using System.Configuration;
+    using TaskProcessor.Helpers.ObjectCreatorFactory;
     using TaskProcessor.Processors;
 
     public class Program
@@ -12,23 +13,11 @@
                 var classess = ConfigurationManager.AppSettings.AllKeys.ToList();
                 classess.ForEach(name =>
                 {
-                    IProcessor processor = GetInstance<IProcessor>(name);
+                    IProcessor processor = ObjectFactory.GetInstance(name);
                     processor = new ProxyForProcessors(processor);
                     processor.Start();
                 });
             }
         }
-
-        #region GetInstance
-
-        public static T GetInstance<T>(string? className)
-        {
-            string objectToInstantiate = $"TaskProcessor.Processors.{className}, TaskProcessor";
-            var objectType = Type.GetType(objectToInstantiate);
-            var instantiatedObject = Activator.CreateInstance(objectType);
-            return (T)instantiatedObject;
-        }
-
-        #endregion
     }
 }
